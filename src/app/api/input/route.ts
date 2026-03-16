@@ -1,5 +1,4 @@
 import { NextResponse } from 'next/server'
-import { extractIp, checkRateLimit } from '@/lib/rate-limit'
 import { moderateInput } from '@/lib/moderation'
 import { getSupabaseServer } from '@/lib/supabase/server'
 
@@ -13,12 +12,6 @@ export async function POST(request: Request) {
 
     if (content.length > 2000) {
       return NextResponse.json({ success: false, error: 'Message too long.' }, { status: 400 })
-    }
-
-    const ip = extractIp(request)
-    const { allowed } = await checkRateLimit(ip)
-    if (!allowed) {
-      return NextResponse.json({ success: false, error: 'Too many submissions. Try again later.' }, { status: 429 })
     }
 
     const { safe } = await moderateInput(content.trim())
