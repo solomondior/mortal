@@ -19,8 +19,8 @@ export function getDaysRemaining(nowMs = Date.now(), deathMs = DEATH_MS): number
 
 export function getPhase(daysRemaining: number): Phase {
   if (daysRemaining === 0) return 'death'
-  if (daysRemaining <= 30) return 'frenzy'
-  if (daysRemaining <= 60) return 'urgency'
+  if (daysRemaining <= 1) return 'frenzy'
+  if (daysRemaining <= 3) return 'urgency'
   return 'acceptance'
 }
 

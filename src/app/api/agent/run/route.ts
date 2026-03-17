@@ -49,7 +49,7 @@ export async function POST(request: Request) {
     const isAnomalyDay = !anomalyTriggered && daysRemaining === ANOMALY_DAY
 
     // Will check: generate on first tick with 1-5 days remaining
-    if (!willGenerated && daysRemaining >= 1 && daysRemaining <= 5) {
+    if (!willGenerated && daysRemaining === 1) {
       const willContent = await generateWill(buildWillPrompt(daysRemaining, context))
       const { data: lastForWill } = await supabase
         .from('dispatches')
