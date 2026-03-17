@@ -82,7 +82,7 @@ export async function POST(request: Request) {
       .maybeSingle()
     const dispatchNumber = (lastDispatch?.number ?? 0) + 1
 
-    const { data: insertedDispatch } = await supabase
+    const { data: insertedDispatch, error: insertError } = await supabase
       .from('dispatches')
       .insert({
         number: dispatchNumber,
@@ -94,6 +94,10 @@ export async function POST(request: Request) {
       })
       .select('number')
       .single()
+
+    if (insertError) {
+      return NextResponse.json({ error: 'Insert failed', detail: insertError.message }, { status: 500 })
+    }
 
     // Mark anomaly triggered
     if (isAnomalyDay) {
@@ -120,7 +124,8 @@ export async function POST(request: Request) {
     }
 
     return NextResponse.json({ success: true, dispatch: dispatchNumber })
-  } catch {
-    return NextResponse.json({ error: 'Generation failed' }, { status: 500 })
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err)
+    return NextResponse.json({ error: 'Generation failed', detail: msg }, { status: 500 })
   }
 }
