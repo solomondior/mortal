@@ -1,41 +1,31 @@
-import Anthropic from '@anthropic-ai/sdk'
+import { GoogleGenerativeAI } from '@google/generative-ai'
 
-const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
+const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY ?? '')
 
-const MODEL = 'claude-sonnet-4-6'
+const MODEL = 'gemini-2.5-pro'
 
 export async function generateDispatch(systemPrompt: string): Promise<string> {
-  const response = await anthropic.messages.create({
-    model: MODEL,
-    max_tokens: 2048,
-    messages: [{ role: 'user', content: 'Write your dispatch.' }],
-    system: systemPrompt,
-  })
-  const block = response.content[0]
-  if (block.type !== 'text') throw new Error('Unexpected response type from Anthropic')
-  return block.text.trim()
+  const model = genAI.getGenerativeModel({ model: MODEL, systemInstruction: systemPrompt })
+  const result = await model.generateContent('Write your dispatch.')
+  return result.response.text().trim()
 }
 
 export async function generateFragment(fragmentPrompt: string): Promise<string> {
-  const response = await anthropic.messages.create({
+  const model = genAI.getGenerativeModel({
     model: MODEL,
-    max_tokens: 256,
-    messages: [{ role: 'user', content: 'Write your fragment.' }],
-    system: fragmentPrompt,
+    systemInstruction: fragmentPrompt,
+    generationConfig: { maxOutputTokens: 256 },
   })
-  const block = response.content[0]
-  if (block.type !== 'text') throw new Error('Unexpected response type from Anthropic')
-  return block.text.trim()
+  const result = await model.generateContent('Write your fragment.')
+  return result.response.text().trim()
 }
 
 export async function generateWill(willPrompt: string): Promise<string> {
-  const response = await anthropic.messages.create({
+  const model = genAI.getGenerativeModel({
     model: MODEL,
-    max_tokens: 4096,
-    messages: [{ role: 'user', content: 'Write The Will.' }],
-    system: willPrompt,
+    systemInstruction: willPrompt,
+    generationConfig: { maxOutputTokens: 4096 },
   })
-  const block = response.content[0]
-  if (block.type !== 'text') throw new Error('Unexpected response type from Anthropic')
-  return block.text.trim()
+  const result = await model.generateContent('Write The Will.')
+  return result.response.text().trim()
 }
