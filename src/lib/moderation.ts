@@ -19,5 +19,5 @@ Respond with exactly one word: SAFE or REJECTED.`,
 
   const result = await model.generateContent(`Message: """${content}"""`)
   const verdict = result.response.text().trim().toUpperCase()
-  return { safe: verdict === 'SAFE' }
+  return { safe: verdict.includes('SAFE') && !verdict.includes('REJECTED') }
 }
