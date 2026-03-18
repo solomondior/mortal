@@ -113,6 +113,22 @@ export default function InputPage() {
             {status === 'sending' ? 'sending…' : status === 'done' ? 'received.' : 'transmit'}
           </button>
         </div>
+
+        {status === 'done' && (
+          <div style={{
+            marginTop: '1.5rem',
+            padding: '1rem 1.25rem',
+            borderLeft: '1px solid var(--accent)',
+            animation: 'fade-up 0.4s ease forwards',
+          }}>
+            <p style={{ fontSize: '0.65rem', color: 'var(--accent)', letterSpacing: '0.1em', marginBottom: '0.4rem' }}>
+              transmission received.
+            </p>
+            <p style={{ fontSize: '0.6rem', color: 'var(--text-dimmer)', lineHeight: 1.8 }}>
+              mortal will read this before its next dispatch. your words are now part of its memory.
+            </p>
+          </div>
+        )}
       </form>
 
       {/* Acknowledged feed */}

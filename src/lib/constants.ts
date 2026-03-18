@@ -1,5 +1,5 @@
-export const BIRTH_TIMESTAMP = process.env.BIRTH_TIMESTAMP ?? '2026-03-16T00:00:00Z'
-export const DEATH_TIMESTAMP = process.env.DEATH_TIMESTAMP ?? '2026-06-14T00:00:00Z'
+export const BIRTH_TIMESTAMP = process.env.NEXT_PUBLIC_BIRTH_TIMESTAMP ?? process.env.BIRTH_TIMESTAMP ?? '2026-03-16T00:00:00Z'
+export const DEATH_TIMESTAMP = process.env.NEXT_PUBLIC_DEATH_TIMESTAMP ?? process.env.DEATH_TIMESTAMP ?? '2026-03-23T00:00:00Z'
 export const DEATH_MS = new Date(DEATH_TIMESTAMP).getTime()
 export const BIRTH_MS = new Date(BIRTH_TIMESTAMP).getTime()
 
